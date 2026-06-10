@@ -1,0 +1,414 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+  --font-primary: 'Outfit', sans-serif;
+  --font-secondary: 'Plus Jakarta Sans', sans-serif;
+
+  /* Colores de FIFA Play Zone */
+  --bg-dark: #040613; 
+  --bg-top-glow: #0b0e27; 
+  --bg-card: #0d1124; 
+  --bg-card-inner: #121731; 
+  --bg-card-hover: #192042;
+  
+  --border-color: #1c2340; 
+  --border-hover: #2e3760;
+
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #8e9cb2;
+  --color-text-muted: #5e6b84;
+
+  /* Acentos de Color Planos de FIFA */
+  --neon-green: #ccff00; 
+  --neon-blue: #00f0ff;  
+  --neon-purple: #6200ea; 
+  --neon-pink: #ff007f;  
+  --neon-gold: #ffaa00;  
+
+  --transition-smooth: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+  --radius-lg: 8px;
+  --radius-md: 6px;
+  --radius-sm: 4px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-primary);
+  background-color: var(--bg-dark);
+  color: var(--color-text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-image: radial-gradient(circle at 50% -20%, var(--bg-top-glow) 0%, var(--bg-dark) 55%);
+  background-attachment: fixed;
+}
+
+/* Contenedor de Paneles Compacto */
+.glass-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+  transition: var(--transition-smooth);
+}
+
+.glass-panel:hover {
+  border-color: var(--border-hover);
+}
+
+/* Tarjetas de Partidos Compactas */
+.glass-card {
+  background: var(--bg-card-inner);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  transition: var(--transition-smooth);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.glass-card:hover {
+  transform: translateY(-1px);
+  border-color: var(--border-hover);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+}
+
+/* Inputs y Selects */
+.glass-input {
+  background: #080b1a;
+  border: 1px solid var(--border-color);
+  color: var(--color-text-primary);
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  outline: none;
+  font-family: var(--font-secondary);
+  font-size: 0.85rem;
+  transition: var(--transition-smooth);
+}
+
+.glass-input:focus {
+  border-color: var(--neon-blue);
+  box-shadow: 0 0 0 2px rgba(0, 240, 255, 0.15);
+}
+
+/* Botones Planos y Compactos */
+.glass-button {
+  background: #192042;
+  border: 1px solid var(--border-color);
+  color: var(--color-text-primary);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: var(--font-primary);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: var(--transition-smooth);
+}
+
+.glass-button:hover {
+  background: #242d5c;
+  border-color: var(--border-hover);
+}
+
+/* Botones Activo / Primario */
+.glass-button.active {
+  background: var(--neon-blue);
+  border: none;
+  color: #040613;
+}
+
+.glass-button.active:hover {
+  background: var(--neon-blue);
+  opacity: 0.9;
+}
+
+.glass-button.primary {
+  background: var(--neon-green);
+  border: none;
+  color: #040613;
+  font-weight: 800;
+}
+
+.glass-button.primary:hover {
+  background: var(--neon-green);
+  opacity: 0.9;
+}
+
+/* Indicador de En Vivo */
+.live-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--neon-pink);
+  color: #ffffff;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  box-shadow: 0 2px 4px rgba(255, 0, 127, 0.3);
+}
+
+@keyframes pulse {
+  0% { transform: scale(0.95); opacity: 0.5; }
+  50% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.5; }
+}
+
+.live-dot {
+  width: 6px;
+  height: 6px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  animation: pulse 1.5s infinite;
+}
+
+/* Banderas Compactas con Borde Blanco */
+.wc-flag {
+  width: 38px;
+  height: 24px;
+  object-fit: cover;
+  border-radius: 0 8px 0 8px;
+  border: 1.5px solid #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+.wc-flag-md {
+  width: 44px;
+  height: 28px;
+  object-fit: cover;
+  border-radius: 0 10px 0 10px;
+  border: 2px solid #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.55);
+}
+
+.wc-flag-sm {
+  width: 20px;
+  height: 13px;
+  object-fit: cover;
+  border-radius: 0 4px 0 4px;
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+/* Entrada de tarjetas animadas */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animated-card {
+  animation: fadeInUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Efecto destello al anotar gol */
+@keyframes goalFlash {
+  0% {
+    border-color: var(--neon-green);
+    box-shadow: 0 0 15px rgba(204, 255, 0, 0.4);
+    background: rgba(204, 255, 0, 0.04);
+  }
+  50% {
+    border-color: var(--neon-blue);
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+    background: rgba(0, 240, 255, 0.04);
+  }
+  100% {
+    border-color: var(--border-color);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    background: var(--bg-card-inner);
+  }
+}
+
+.goal-flash {
+  animation: goalFlash 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes bellShake {
+  0%, 100% { transform: rotate(0); }
+  15% { transform: rotate(8deg); }
+  30% { transform: rotate(-8deg); }
+  45% { transform: rotate(5deg); }
+  60% { transform: rotate(-5deg); }
+}
+
+.bell-pulse {
+  animation: bellShake 1.5s ease-in-out infinite;
+  display: inline-block;
+}
+
+/* Ajustes elásticos para los equipos en tarjetas */
+.card-team-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex: 1 1 0%;
+  min-width: 0;
+}
+
+.card-team-name {
+  font-weight: 600; 
+  font-size: 0.85rem; 
+  text-align: center;
+  line-height: 1.2;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Explicaciones / Pasos en la Hero Section */
+.info-step-card {
+  background: rgba(255, 255, 255, 0.01);
+  border: 1px dashed var(--border-color);
+  padding: 12px;
+  border-radius: var(--radius-md);
+  transition: var(--transition-smooth);
+}
+
+.info-step-card:hover {
+  background: rgba(255, 255, 255, 0.02);
+  border-color: var(--border-hover);
+}
+
+/* Ajustes del Contenedor de la Página */
+.app-container {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-title {
+  font-size: 1.6rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+}
+
+.logo-subtitle {
+  font-family: var(--font-secondary);
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  margin-top: 1px;
+}
+
+/* Rejilla Principal */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+}
+
+@media (min-width: 1024px) {
+  .dashboard-grid {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 1.35fr);
+  }
+}
+
+/* Tabla de Clasificaciones Compacta y Responsiva */
+.standings-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+  text-align: left;
+}
+
+.standings-table th,
+.standings-table td {
+  padding: 8px 4px;
+  vertical-align: middle;
+}
+
+.standings-table th {
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  color: var(--color-text-secondary);
+}
+
+.standings-table .col-num {
+  width: 22px;
+  text-align: center;
+  padding-left: 2px;
+}
+
+.standings-table .col-team {
+  /* Consume el espacio restante */
+}
+
+.standings-table .team-name-text {
+  display: inline-block;
+  max-width: 75px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+@media (min-width: 1300px) {
+  .standings-table .team-name-text {
+    max-width: none;
+    display: inline;
+  }
+}
+
+.standings-table .col-stat {
+  width: 26px;
+  text-align: center;
+}
+
+.standings-table .col-dg {
+  width: 30px;
+}
+
+.standings-table .col-pts {
+  width: 32px;
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 2.5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-hover);
+}
