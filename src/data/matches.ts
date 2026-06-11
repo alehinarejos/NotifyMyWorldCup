@@ -3,6 +3,15 @@ import { STADIUMS } from "./stadiums";
 import type { Team } from "./teams";
 import type { Stadium } from "./stadiums";
 
+export interface PolymarketOdds {
+  homeWin: number;       // Percentage (0-100)
+  awayWin: number;       // Percentage (0-100)
+  draw: number;          // Percentage (0-100)
+  source: "official" | "simulated";
+  question?: string;     // Exact question on Polymarket
+  link?: string;         // Link to Polymarket market
+}
+
 export interface Match {
   id: string;
   homeTeamId: string;
@@ -19,6 +28,7 @@ export interface Match {
   timeElapsed: number; // 0 for not started, up to 90+ for live
   status: "scheduled" | "live" | "finished";
   type: "group" | "round_of_32" | "round_of_16" | "quarter" | "semi" | "final";
+  polymarketOdds?: PolymarketOdds;
 }
 
 export interface MatchWithDetails extends Match {

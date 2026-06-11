@@ -172,6 +172,132 @@ export const MatchCard: React.FC<MatchCardProps> = ({
         </div>
       </div>
 
+      {/* Probabilidades de Victoria (Polymarket) */}
+      {match.polymarketOdds && (
+        <div style={{ 
+          display: "flex", 
+          flexDirection: "column", 
+          gap: "6px",
+          padding: "10px 12px",
+          background: "rgba(255,255,255,0.02)",
+          borderRadius: "var(--radius-md)",
+          border: "1px solid rgba(255,255,255,0.04)",
+          fontSize: "0.75rem"
+        }}>
+          {/* Cabecera del Indicador */}
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <span style={{ color: "var(--color-text-secondary)", fontWeight: 600 }}>
+              Probabilidad de Victoria
+            </span>
+            
+            {match.polymarketOdds.link ? (
+              <a 
+                href={match.polymarketOdds.link} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                title={match.polymarketOdds.question || "Ver en Polymarket"}
+                style={{ 
+                  display: "flex", 
+                  alignItems: "center", 
+                  gap: "4px",
+                  textDecoration: "none",
+                  fontWeight: 700,
+                  fontSize: "0.7rem",
+                  color: match.polymarketOdds.source === "official" ? "var(--neon-green)" : "var(--neon-purple)"
+                }}
+              >
+                <span style={{ 
+                  width: "6px", 
+                  height: "6px", 
+                  background: match.polymarketOdds.source === "official" ? "var(--neon-green)" : "var(--neon-purple)", 
+                  borderRadius: "50%",
+                  boxShadow: match.polymarketOdds.source === "official" 
+                    ? "0 0 8px var(--neon-green)" 
+                    : "0 0 8px var(--neon-purple)",
+                  display: "inline-block"
+                }} />
+                <span>{match.polymarketOdds.source === "official" ? "Polymarket Oficial" : "Estimación"}</span>
+              </a>
+            ) : (
+              <div style={{ 
+                display: "flex", 
+                alignItems: "center", 
+                gap: "4px",
+                fontWeight: 700,
+                fontSize: "0.7rem",
+                color: match.polymarketOdds.source === "official" ? "var(--neon-green)" : "var(--neon-purple)"
+              }}>
+                <span style={{ 
+                  width: "6px", 
+                  height: "6px", 
+                  background: match.polymarketOdds.source === "official" ? "var(--neon-green)" : "var(--neon-purple)", 
+                  borderRadius: "50%",
+                  boxShadow: match.polymarketOdds.source === "official" 
+                    ? "0 0 8px var(--neon-green)" 
+                    : "0 0 8px var(--neon-purple)",
+                  display: "inline-block"
+                }} />
+                <span>{match.polymarketOdds.source === "official" ? "Polymarket Oficial" : "Estimación"}</span>
+              </div>
+            )}
+          </div>
+
+          {/* Barra de Progreso Triple */}
+          <div style={{ 
+            height: "8px", 
+            width: "100%", 
+            background: "rgba(255,255,255,0.05)", 
+            borderRadius: "4px", 
+            overflow: "hidden",
+            display: "flex",
+            margin: "4px 0"
+          }}>
+            {/* Local Win */}
+            <div style={{ 
+              width: `${match.polymarketOdds.homeWin}%`, 
+              height: "100%", 
+              background: "linear-gradient(90deg, var(--neon-blue), #3b82f6)",
+              transition: "width 0.5s ease-in-out"
+            }} title={`Local (${match.homeTeam.code}): ${match.polymarketOdds.homeWin}%`} />
+            
+            {/* Draw */}
+            <div style={{ 
+              width: `${match.polymarketOdds.draw}%`, 
+              height: "100%", 
+              background: "rgba(255,255,255,0.15)",
+              transition: "width 0.5s ease-in-out"
+            }} title={`Empate: ${match.polymarketOdds.draw}%`} />
+            
+            {/* Away Win */}
+            <div style={{ 
+              width: `${match.polymarketOdds.awayWin}%`, 
+              height: "100%", 
+              background: "linear-gradient(90deg, var(--neon-pink), #ec4899)",
+              transition: "width 0.5s ease-in-out"
+            }} title={`Visitante (${match.awayTeam.code}): ${match.polymarketOdds.awayWin}%`} />
+          </div>
+
+          {/* Porcentajes Desglosados */}
+          <div style={{ 
+            display: "flex", 
+            justifyContent: "space-between", 
+            fontSize: "0.68rem", 
+            color: "var(--color-text-secondary)",
+            fontWeight: 500
+          }}>
+            <span style={{ color: "var(--neon-blue)", fontWeight: 700 }}>
+              {match.homeTeam.code} {match.polymarketOdds.homeWin}%
+            </span>
+            <span style={{ color: "var(--color-text-muted)" }}>
+              Empate {match.polymarketOdds.draw}%
+            </span>
+            <span style={{ color: "var(--neon-pink)", fontWeight: 700 }}>
+              {match.awayTeam.code} {match.polymarketOdds.awayWin}%
+            </span>
+          </div>
+        </div>
+      )}
+
       {/* Incidencias / Goleadores (si existen) */}
       {(match.homeScorers.length > 0 || match.awayScorers.length > 0) && (
         <div style={{ 

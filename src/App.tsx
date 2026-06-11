@@ -11,6 +11,7 @@ import { CalendarModal } from "./components/CalendarModal";
 import { SimulatorControl } from "./components/SimulatorControl";
 import { useNotifications } from "./hooks/useNotifications";
 import { WC26Logo } from "./components/WC26Logo";
+import { fetchPolymarketOdds, getSimulatedOdds } from "./utils/polymarket";
 
 // Goleadores realistas de selecciones para el simulador
 const POPULAR_SCORERS: Record<string, string[]> = {
@@ -68,18 +69,28 @@ const GENERIC_SCORERS = ["G. Martínez", "M. Kovac", "J. Silva", "A. Ndoye", "K.
 
 export default function App() {
   const [matches, setMatches] = useState<Match[]>(() => {
+    let baseMatches = MATCHES;
     // Intentar cargar estado anterior del simulador si existe
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("wc2026_matches_official");
       if (saved) {
         try {
-          return JSON.parse(saved);
+          baseMatches = JSON.parse(saved);
         } catch (e) {
           console.error("Error loading saved matches", e);
         }
       }
     }
-    return MATCHES;
+    // Asegurar que todos tengan odds (simuladas por defecto si no existen)
+    return baseMatches.map(m => {
+      if (!m.polymarketOdds) {
+        return {
+          ...m,
+          polymarketOdds: getSimulatedOdds(m.homeTeamId, m.awayTeamId)
+        };
+      }
+      return m;
+    });
   });
 
   const [liveEvents, setLiveEvents] = useState<string[]>(() => {
@@ -100,6 +111,39 @@ export default function App() {
   
   // Sincronización en vivo
   const [isLiveSync, setIsLiveSync] = useState(false);
+
+  // Sincronización de Polymarket
+  const [isSyncingPolymarket, setIsSyncingPolymarket] = useState(false);
+
+  const syncPolymarketOdds = useCallback(async () => {
+    setIsSyncingPolymarket(true);
+    try {
+      const matchesSimpleList = MATCHES.map(m => ({
+        id: m.id,
+        homeTeamId: m.homeTeamId,
+        awayTeamId: m.awayTeamId
+      }));
+      const odds = await fetchPolymarketOdds(matchesSimpleList);
+      setMatches(prev => prev.map(m => {
+        if (odds[m.id]) {
+          return {
+            ...m,
+            polymarketOdds: odds[m.id]
+          };
+        }
+        return m;
+      }));
+    } catch (e) {
+      console.error("Error syncing Polymarket odds", e);
+    } finally {
+      setIsSyncingPolymarket(false);
+    }
+  }, []);
+
+  // Sincronizar odds automáticamente al montar la aplicación
+  useEffect(() => {
+    syncPolymarketOdds();
+  }, [syncPolymarketOdds]);
   
   // Filtros
   const [searchQuery, setSearchQuery] = useState("");
@@ -420,11 +464,15 @@ export default function App() {
   // Reiniciar simulador
   const handleResetSimulation = () => {
     setIsSimulating(false);
-    setMatches(MATCHES);
+    setMatches(MATCHES.map(m => ({
+      ...m,
+      polymarketOdds: getSimulatedOdds(m.homeTeamId, m.awayTeamId)
+    })));
     setLiveEvents([]);
     localStorage.removeItem("wc2026_matches_official");
     localStorage.removeItem("wc2026_live_events_official");
     addLiveEvent("🔄 Simulador restablecido. Todos los marcadores han vuelto a cero.");
+    syncPolymarketOdds();
   };
 
   // Convertir base de partidos a modelo ampliado con banderas y estadios
@@ -490,6 +538,30 @@ export default function App() {
               animation: isLiveSync ? "pulse 1.2s infinite" : "none" 
             }} />
             <span>{isLiveSync ? "📡 Sincronizando..." : "📡 Sincronizar en Vivo"}</span>
+          </button>
+
+          {/* Polymarket Sync Toggle */}
+          <button 
+            onClick={syncPolymarketOdds}
+            disabled={isSyncingPolymarket}
+            className={`glass-button ${isSyncingPolymarket ? "active" : ""}`}
+            style={{ 
+              fontSize: "0.85rem", 
+              gap: "8px", 
+              borderColor: isSyncingPolymarket ? "var(--neon-purple)" : "rgba(139, 92, 246, 0.4)",
+              color: isSyncingPolymarket ? "#040613" : "white",
+              cursor: isSyncingPolymarket ? "wait" : "pointer"
+            }}
+          >
+            <span style={{ 
+              display: "inline-block", 
+              width: "8px", 
+              height: "8px", 
+              background: isSyncingPolymarket ? "#040613" : "var(--neon-purple)", 
+              borderRadius: "50%",
+              animation: isSyncingPolymarket ? "pulse 1.2s infinite" : "none" 
+            }} />
+            <span>{isSyncingPolymarket ? "🔮 Sincronizando..." : "🔮 Sincronizar Polymarket"}</span>
           </button>
 
           {permission === "granted" ? (
